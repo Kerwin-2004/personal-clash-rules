@@ -1,0 +1,11 @@
+# 国外 AI 各自独立；第一个选项为默认：🚀 手动选择。
+# `.*` 由 SubConverter 展开为订阅内真实节点，不使用国家策略组。
+# 家宽沿用 Aethersailor Full 的「🏠 家宽节点」自动测速组。
+custom_proxy_group=🧠 Claude`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=✨ Gemini`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=🔎 Perplexity`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=⚡ Grok`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=💻 GitHub Copilot`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=🖥️ Cursor`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=🌊 Windsurf`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*
+custom_proxy_group=🟣 Poe`select`[]🚀 手动选择`[]🏠 家宽节点`[]♻️ 自动选择`.*

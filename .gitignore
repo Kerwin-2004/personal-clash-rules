@@ -1,0 +1,13 @@
+# NEVER commit personal subscriptions, credentials, or full nodes
+*.yaml
+*.yml
+!/.github/workflows/*.yml
+*.json
+*.txt.bak
+*.env
+.env*
+subscription*
+subscribed*
+nodes*
+*.log
+__pycache__/

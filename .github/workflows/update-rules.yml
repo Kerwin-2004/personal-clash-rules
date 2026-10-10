@@ -1,0 +1,43 @@
+name: Sync upstream Clash rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'  # 03:17 UTC daily / 11:17 Beijing time
+  push:
+    branches: [main]
+    paths:
+      - 'custom/**'
+      - 'scripts/update_rules.py'
+      - '.github/workflows/update-rules.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-clash-rules
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build from official upstream and personal overrides
+        run: python3 scripts/update_rules.py
+      - name: Commit generated INI only when changed
+        run: |
+          if git diff --quiet -- config/Custom_Clash.ini && git ls-files --error-unmatch config/Custom_Clash.ini >/dev/null 2>&1; then
+            echo 'No changes'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add config/Custom_Clash.ini
+          if git diff --cached --quiet; then
+            echo 'No changes staged'
+          else
+            git commit -m 'chore: update upstream rules with personal overrides'
+            git push
+          fi
