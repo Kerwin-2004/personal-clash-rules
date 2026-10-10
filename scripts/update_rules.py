@@ -108,7 +108,6 @@ def build(source: str) -> str:
         "ruleset=🎯 全球直连,[]GEOSITE,category-ai-cn",
         "; ===== 个人分类结束 =====",
     ]
-    lines[index_unique(lines, ACADEMIC_RULE)] = ACADEMIC_RULE.replace("📚 学术资源", "📚 科研工具")
     if trailing_rules:
         idx = index_unique(lines, FINAL_ANCHOR)
         lines[idx:idx] = trailing_rules
@@ -137,12 +136,7 @@ def build(source: str) -> str:
             name = group_name(line)
             if is_removed_group(name) or name == "🤖 国内AI服务":
                 continue
-            if name == "📚 学术资源":
-                line = override_map.get(name, line).replace(
-                    "custom_proxy_group=📚 学术资源`", "custom_proxy_group=📚 科研工具`", 1
-                )
-            else:
-                line = override_map.get(name, line)
+            line = override_map.get(name, line)
             line = adapt_selection(line)
         output.append(line)
 
