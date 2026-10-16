@@ -1,11 +1,6 @@
 # 仅引用 v2fly/domain-list-community 已有 GeoSite 分类；不自建域名清单。
-# Aethersailor Full 的 ChatGPT(openai)、微软 Copilot(bing) 规则保持不变。
-# 这里必须位于 category-ai-!cn（国外 AI 聚合分类）之前。
+# 只把 ChatGPT(openai)、Claude(anthropic)、Gemini(google-deepmind) 单列；
+# 其余国外 AI 仍由 category-ai-!cn 聚合统一进入「🤖 国外AI服务」。
+# 这些分类同时属于 category-ai-!cn，因此必须位于该聚合规则之前。
 ruleset=🧠 Claude,[]GEOSITE,anthropic
 ruleset=✨ Gemini,[]GEOSITE,google-deepmind
-ruleset=🔎 Perplexity,[]GEOSITE,perplexity
-ruleset=⚡ Grok,[]GEOSITE,xai
-ruleset=💻 GitHub Copilot,[]GEOSITE,github-copilot
-ruleset=🖥️ Cursor,[]GEOSITE,cursor
-ruleset=🌊 Windsurf,[]GEOSITE,windsurf
-ruleset=🟣 Poe,[]GEOSITE,poe
