@@ -274,6 +274,8 @@ def build(source: str) -> str:
         elif is_stale_rollback(line):
             # 上游为旧版去重配置保留的注释回退块仍引用已删除的地区组，一并清理。
             continue
+        elif line == ";GFW 及专用规则未命中的国外域名默认直连，可在策略组中切换代理":
+            line = ";GFW 及专用规则未命中的国外域名按「🌍 国外域名」策略组的当前选择处理"
         output.append(line)
 
     extra_names = set()
@@ -282,7 +284,11 @@ def build(source: str) -> str:
         if name in upstream_names or name in extra_names or is_removed_group(name):
             raise RuntimeError(f"新增组与上游冲突或无效: {name}")
         extra_names.add(name)
-    idx = index_unique(output, GROUP_CLOSE_ANCHOR)
+    chatgpt_groups = [i for i, line in enumerate(output)
+                     if line.startswith("custom_proxy_group=🤖 ChatGPT`")]
+    if len(chatgpt_groups) != 1:
+        raise RuntimeError("ChatGPT 策略组缺失或重复，无法排列个人 AI 分组")
+    idx = chatgpt_groups[0] + 1
     output[idx:idx] = ["; ===== 个人 AI 独立策略组 =====", *[adapt_selection(x) for x in extras], "; ===== 个人 AI 组结束 ====="]
 
     final_groups = [group_name(l) for l in output if l.startswith("custom_proxy_group=")]

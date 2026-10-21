@@ -7,6 +7,8 @@
 ## 功能
 
 - **AI 独立分流**：只把 ChatGPT、Claude、Gemini 单列成组，规则位于国外 AI 聚合规则之前；其余国外 AI（含 Copilot、Perplexity、Grok、Cursor、Windsurf、Poe 等）统一走上游 `🤖 国外AI服务` 组。
+- **AI 分组顺序**：`🤖 ChatGPT` → `🧠 Claude` → `✨ Gemini` → `🤖 国外AI服务`；新增个人 AI 组按 `custom/groups_extra.txt` 中的顺序紧随 ChatGPT。
+- **默认出口**：`🌍 国外域名` 和 `🐟 漏网之鱼` 默认选择 `🚀 手动选择`，`🔀 非标端口` 默认选择 `🐟 漏网之鱼`。这些设置由 `custom/groups_override.txt` 持续覆盖；客户端已记住的历史选择需要在客户端手动切换。
 - **国内 AI 直连**：使用 `GEOSITE,category-ai-cn`，不显示国内 AI 策略组。
 - **Telegram 单列**：`💬 Telegram` 组位于 `💬 即时通讯` 之前，可单独切换出口；后者继续覆盖 WhatsApp、Line 等。
 - **流媒体合并**：奈飞、迪士尼、HBO、PrimeVideo、AppleTV+、Spotify 合并为 `🎥 流媒体` 组，规则位于 `🍎 苹果服务` 之前（`apple` 分类含 `apple-tvplus`）。YouTube、TikTok、Emby、Bahamut 保持独立。
