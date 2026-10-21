@@ -32,8 +32,14 @@ TELEGRAM_GROUP = "💬 Telegram"
 COMMUNICATION_GROUP = "💬 即时通讯"
 COMMUNICATION_RULE = "ruleset=💬 即时通讯,[]GEOSITE,category-communication"
 TELEGRAM_GEOSITE_RULE = f"ruleset={TELEGRAM_GROUP},[]GEOSITE,telegram"
-TELEGRAM_GEOIP_OLD = "ruleset=💬 即时通讯,[]GEOIP,telegram,no-resolve"
 TELEGRAM_GEOIP_NEW = f"ruleset={TELEGRAM_GROUP},[]GEOIP,telegram,no-resolve"
+UPSTREAM_TELEGRAM_GROUP = "📨 Telegram"
+# These upstream groups now precede the AI aggregate. Personal Claude/Gemini
+# rules replace them; the other services must continue using the aggregate.
+UPSTREAM_AI_GROUPS = {
+    "🤖 Claude", "🤖 Gemini", "🤖 Grok", "🤖 Cursor",
+    "🤖 Perplexity", "🤗 Hugging Face",
+}
 TELEGRAM_GROUP_DEF = (
     f"custom_proxy_group={TELEGRAM_GROUP}`select`[]🚀 手动选择`[]♻️ 自动选择`.*"
 )
@@ -84,6 +90,8 @@ REMOVED_GROUPS = {
     "🎥 PrimeVideo",
     "🎥 AppleTV+",
     "🎻 Spotify",
+    UPSTREAM_TELEGRAM_GROUP,
+    *UPSTREAM_AI_GROUPS,
 }
 FINAL_ANCHOR = "ruleset=🐟 漏网之鱼,[]FINAL"
 GROUP_CLOSE_ANCHOR = ";设置分组标志位"
@@ -171,6 +179,20 @@ def build(source: str) -> str:
     overrides = load_custom("groups_override.txt", "custom_proxy_group=")
     extras = load_custom("groups_extra.txt", "custom_proxy_group=")
 
+    # Accept both the legacy shared Telegram policy and the dedicated upstream
+    # policy. Match the rule payload so a display-name change cannot break sync.
+    telegram_ip = [line for line in lines if line.startswith("ruleset=")
+                   and line.split(",", 1)[1] == "[]GEOIP,telegram,no-resolve"]
+    if len(telegram_ip) != 1:
+        raise RuntimeError("上游 Telegram GEOIP 规则缺失或重复")
+    lines[lines.index(telegram_ip[0])] = TELEGRAM_GEOIP_NEW
+    lines = [line for line in lines if not (
+        line.startswith("ruleset=") and (
+            line.split(",", 1)[0][len("ruleset="):] in UPSTREAM_AI_GROUPS
+            or line.split(",", 1)[1] == "[]GEOSITE,telegram"
+        )
+    )]
+
     # Preserve upstream rules/ordering. Insert existing GeoSite subsets BEFORE
     # category-ai-!cn; that category is an aggregate containing those subsets.
     lines.remove(DOMESTIC_AI)
@@ -198,7 +220,6 @@ def build(source: str) -> str:
         ";Telegram 单列分组，须先于即时通讯聚合匹配",
         TELEGRAM_GEOSITE_RULE,
     ]
-    lines[index_unique(lines, TELEGRAM_GEOIP_OLD)] = TELEGRAM_GEOIP_NEW
 
     # bing 交给 Ⓜ️ 微软服务：删除上游 🤖 Copilot 规则（组定义随 REMOVED_GROUPS 删除）。
     lines.remove(COPILOT_RULE)
